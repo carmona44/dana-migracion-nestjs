@@ -9,11 +9,14 @@ import { MongooseModule } from '@nestjs/mongoose';
   imports: [
     CountryModule,
     SuperheroeModule, 
-    MongooseModule.forRoot('mongodb://localhost/dana', 
-    { 
-      useNewUrlParser: true, 
-      useUnifiedTopology: true, 
-      useFindAndModify: false 
+    MongooseModule.forRootAsync({
+      useFactory: () => ({
+        uri: 'mongodb://localhost/dana',
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useCreateIndex: true,
+        useFindAndModify: false
+      }),
     })
   ],
   controllers: [AppController],
