@@ -15,7 +15,7 @@ export class SuperheroeService {
     }
 
     async getAll(): Promise<Superheroe[]> {
-        return this.superheroeModel.find().populate('country').skip(0).limit(5);
+        return this.superheroeModel.find().populate('country').skip(0).limit(10);
     }
 
     async getOne(id: string): Promise<Superheroe> {

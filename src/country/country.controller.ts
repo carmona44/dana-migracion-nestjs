@@ -1,8 +1,9 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, UseGuards, Req, Res, HttpStatus } from '@nestjs/common';
 import { CountryService } from './country.service';
 import { CreateCountryDto } from './dto/create-country.dto';
 import { Country } from './interfaces/country.interface';
 import { AuthGuard } from 'src/auth.guard';
+import { Request, Response } from 'express';
 
 @Controller('country')
 @UseGuards(AuthGuard)
@@ -16,8 +17,9 @@ export class CountryController {
     }
 
     @Get()
-    async getAll(): Promise<Country[]>{
+    async getAll(/*@Res() res: Response*/){
         return this.countryService.getAll();
+        //res.status(HttpStatus.OK).json({message: 'Todo ok', countries: await this.countryService.getAll()});
     }
 
     @Get(':id')
