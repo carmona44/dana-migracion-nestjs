@@ -14,8 +14,47 @@ export class SuperheroeService {
         return superheroe.save();
     }
 
-    async getAll(): Promise<Superheroe[]> {
-        return this.superheroeModel.find().populate('country').skip(0).limit(10);
+    async getAll(next: string) {
+
+        if(!next){
+
+            const items =  await this.superheroeModel.find({}).sort({
+                createdAt: -1,
+                _id: -1
+             })
+             .populate('country')
+             .limit(2);
+             
+             const lastItem = items[items.length - 1];
+             const created = Date.parse(lastItem.createdAt);
+             const nxt = `${created}_${lastItem._id}`;
+             
+             return { items, next: nxt };
+
+        }
+
+        const [nextCreatedAt, nextId] = next.split('_');
+
+        const items = await this.superheroeModel.find({
+
+            $or: [{
+                createdAt: { $lt: nextCreatedAt }
+            }, {
+                createdAt: nextCreatedAt,
+            _id: { $lt: nextId }
+            }]
+
+        }).sort({
+            _id: -1
+        }).populate('country')
+        .limit(2);
+
+        const lastItem = items[items.length - 1];
+        const created = Date.parse(lastItem.createdAt);
+        const nxt = `${created}_${lastItem._id}`;
+        
+        return { items, next: nxt };
+
     }
 
     async getOne(id: string): Promise<Superheroe> {

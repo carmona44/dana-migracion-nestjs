@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Get, Param, Put, Delete, UseGuards, BadRequestException, UseFilters } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Put, Delete, UseGuards, BadRequestException, UseFilters, Query } from '@nestjs/common';
 import { SuperheroeService } from './superheroe.service';
 import { CreateSuperheroeDto } from './dto/create-superheroe.dto';
 import { Superheroe } from './interfaces/superheroe.interface';
@@ -16,8 +16,8 @@ export class SuperheroeController {
     }
 
     @Get()
-    async getAll(): Promise<Superheroe[]> {
-        return this.superheroeService.getAll();
+    async getAll(@Query('next') next: string) {
+        return this.superheroeService.getAll(next);
     }
 
     @Get(':id')
